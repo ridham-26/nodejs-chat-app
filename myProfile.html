@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet" href="chatAppUI.css">
+
+    <script src="loadChatContainers.js"></script>
+    <script src="friendReq.js"></script>
+    <script src="search.js"></script>
+    <script src="editValidation.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+    <script src="group.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/chatAppHome">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024"><path fill="white" fill-opacity=".15" d="M775.3 248.9a369.62 369.62 0 0 0-119-80A370.2 370.2 0 0 0 512.1 140h-1.7c-99.7.4-193 39.4-262.8 109.9c-69.9 70.5-108 164.1-107.6 263.8c.3 60.3 15.3 120.2 43.5 173.1l4.5 8.4V836h140.8l8.4 4.5c52.9 28.2 112.8 43.2 173.1 43.5h1.7c99 0 192-38.2 262.1-107.6c70.4-69.8 109.5-163.1 110.1-262.7c.2-50.6-9.5-99.6-28.9-145.8a370.15 370.15 0 0 0-80-119zM312 560a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96z"/><path fill="white" d="M664 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0zm-400 0a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/><path fill="white" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 0 0-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 0 0-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 0 0 112 714v152a46 46 0 0 0 46 46h152.1A449.4 449.4 0 0 0 510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 0 0 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z"/><path fill="white" d="M464 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/></svg> 
+            Spark</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div class="search-container">
+                        <div class="d-flex">
+                            <input type="text" class="form-control rounded-pill" placeholder="Search..." id="search">
+                            <span class="d-flex align-items-center search">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="#d8e1e7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div id="search-results"></div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item d-flex text-light dropdown">
+                    <div class="requestsContainer">
+                        <div class="friendRequests me-4 d-flex justify-content-center rounded-pill align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="rgb(132, 142, 148)" d="M19 17v2H7v-2s0-4 6-4s6 4 6 4m-3-9a3 3 0 1 0-3 3a3 3 0 0 0 3-3m3.2 5.06A5.6 5.6 0 0 1 21 17v2h3v-2s0-3.45-4.8-3.94M18 5a2.91 2.91 0 0 0-.89.14a5 5 0 0 1 0 5.72A2.91 2.91 0 0 0 18 11a3 3 0 0 0 0-6M8 10H5V7H3v3H0v2h3v3h2v-3h3Z"/></svg>
+                        </div>
+                        <div class="requestsPanel px-2"></div>
+                    </div>
+                    <div class="requestsIndicator"></div>
+                    <div class="dropdown">
+                        <div id="selfProfile">
+                            <img src="" alt="Profile" class="dropdown-toggle" data-bs-toggle="dropdown" />
+                            
+                            <ul class="dropdown-menu">
+                                <li><div class="dropdown-item">Your Profile</div></li>
+                                <li><div class="dropdown-item" id="logout" style="color: rgb(219, 69, 69);">Logout</div></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sidenavContainer">
+        <div class="sidenav py-3 ps-2">
+            <div class="sideNavGroup d-flex align-items-center ps-2" data-bs-toggle="modal" data-bs-target="#createGroup">
+                + Add Group
+            </div>
+            <div class="chatContainerLoader w-100">
+                <div class="spinner-border text-secondary"></div>
+            </div>
+            <div class="d-flex flex-column sidenavAppend">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mainProfileContainer container-fluid pb-5">
+
+        <div class="profileLoader w-100">
+            <div class="spinner-border text-secondary"></div>
+        </div>
+
+        <div class="myProfileContainer">
+            <div class="row w-100" style="height: 170px;">
+                <div style="width: 200px; padding-left: 50px; padding-top: 10px;">
+                    <div class="imgContainer">
+                        <img src="" alt="Profile">
+                    </div>
+                    <div class="editpp text-center">Edit</div>
+                    <form id="editProfilePic" style="display: none;">
+                        <input type="file" id="editedpp" accept="image/*" />
+                    </form>
+                </div>
+                <div class="col" style="padding: 20px 0 0 30px; position: relative;">
+                    <h1 class="fnameDisplay"></h1>
+                    <p class="usernameDisplay"></p>
+                    <div class="friends">
+                        <span>Friends: </span>
+                        <span class="friendsCount"></span>
+                    </div>
+                    <div class="friendsList">
+                        
+                    </div>
+                    <div style="margin-top: 10px;" class="d-flex" id="profileActions">
+                        <button class="btn btn-primary btn-sm edit me-2" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Profile</button>
+                        <button class="btn btn-primary btn-sm editPsswd me-2" data-bs-toggle="modal" data-bs-target="#changePsswd">Edit Password</button>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row w-100 ps-4 mt-4" id="otherDetailsDisplay">
+                <div>
+                    <h5>Gender</h5>
+                    <p class="otherDetailsGender"></p>
+                </div>
+                <div>
+                    <h5>Birthdate</h5>
+                    <p class="otherDetailsDob"></p>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <p class="otherDetailsPnum"></p>
+                </div>
+                <div>
+                    <h5>Mail</h5>
+                    <p class="otherDetailsMail"></p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>Registered on</h5>
+                        <p class="otherDetailsRegon"></p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button class="deleteMyAccount btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editProfile">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit your profile</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="edit-form">
+                        <div title="name" class="form-group row">
+                            <label for="fname" class="col-12 col-md-auto col-form-label">Firstname</label>
+                            <div class="col">
+                                <input type="text" class=" form-control" id="fname" aria-describedby="fnameerr" placeholder="Firstname..." autocomplete="on">
+                                <small id="fnameerr" class="form-text"></small>
+                            </div>
+                            <label for="lname" class="col-12 col-md-auto col-form-label">Lastname</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="lname" aria-describedby="lnameerr" placeholder="Lastname...">
+                                <small id="lnameerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label for="pnumber" class="form-label">Mobile Number</label>
+                        <div class="d-flex">
+                            <select name="pcountry" id="pcountry" class="form-control">
+                                <option value="+91" class="defaultNum">In(+91)</option>
+                                <option value="+1">US(+1)</option>
+                                <option value="+10">Can(+10)</option>
+                                <option value="+44">UK(+44)</option>
+                                <option value="+7">Rus(+7)</option>
+                            </select>
+                            <input type="text" id="pnumber" name="pnumber" class="form-control" placeholder="Enter your Mobile Number..." maxlength="10">
+                        </div>
+                        <small id="pnumerr"></small>
+
+                        <hr>
+                        <div title="email" class="form-group row">
+                            <label for="email" class="col-12 col-md-auto col-form-label">Email</label>
+                            <div class="col">
+                                <input type="email" class="form-control" id="email" aria-describedby="emailerr" placeholder="Enter email..." autocomplete="on">
+                                <small id="emailerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div title="uname" class="form-group row">
+                            <label for="uname" class="col-12 col-md-auto col-form-label">Username</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="uname" aria-describedby="unameerr" placeholder="Enter Username..." autocomplete="on">
+                                <small id="unameerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row d-flex mqdate flex-nowrap">
+                            <div class="row d-flex mqdate flex-nowrap">
+                                <div class="dateDisp">
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <h4 class="mt-1 me-1">Date of Birth: </h4>
+                                        <input id="selectedDate" placeholder="Select date" readonly/>
+                                    </div>
+                                    <span class="invDate">
+                                        <div id="date"></div>
+                                    </span>
+                                    <small class="dateerr"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div title="gender" class="form-group row" aria-describedby="gendererr">
+                            <span class="col-12 col-md-auto col-form-label">Gender</span>
+                            <div class="col d-flex align-items-center">
+                                <div class="row g-0">
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gmale" value="male">
+                                        <label class="form-check-label" for="gmale">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gfemale" value="female">
+                                        <label class="form-check-label" for="gfemale">Female</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gother" value="other">
+                                        <label class="form-check-label" for="gother">Other</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <small id="gendererr" class="form-text"></small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <small id="formerr" class="form-text"></small>
+                        
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit" class="btn btn-success" style="margin-right: 0px;" data-_id="">Done</button>
+                        </div>
+                    </form>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePsswd">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Change Password</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="changePsswd-form">
+                        <div class="form-group row mb-2">
+                            <label for="ppsswd" class="col-12 col-md-auto col-form-label">Current Password</label>
+                            <div class="col">
+                                <div class="input-group pass-toggle">
+                                    <input type="password" class="form-control" id="ppsswd" aria-describedby="ppsswderr" placeholder="Enter Password... " autocomplete="off">
+                                    <button type="button" class="toggle-btn btn btn-light">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <small id="ppsswderr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label for="psswd" class="col-12 col-md-auto col-form-label">New Password</label>
+                            <div class="col">
+                                <div class="input-group pass-toggle">
+                                    <input type="password" class="form-control" id="psswd" aria-describedby="psswderr" placeholder="Enter Password... " autocomplete="off">
+                                    <button type="button" class="toggle-btn btn btn-light">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <small id="psswderr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <div title="cpsswd" class="form-group row">
+                            <label for="cpsswd" class="col-12 col-md-auto col-form-label">Confirm New Password</label>
+                            <div class="w-100 d-none"></div>
+                            <div class="col">
+                                <input type="password" class="form-control" id="cpsswd" aria-describedby="cpsswderr" placeholder="Confirm Password..." autocomplete="off">
+                                <small id="cpsswderr" class="form-text"></small>
+                            </div>
+                        </div>
+
+                        <small id="formerr" class="form-text"></small>
+                        
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit"  class="btn btn-success" style="margin-right: 0px;">Done</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createGroup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Members (more than 2)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="group-form">
+                        <div class="form-group row mb-2">
+                            <label for="ppsswd" class="col-12 col-md-auto col-form-label">Group Title</label>
+                            <div class="col">
+                                <div class="input-group pass-toggle">
+                                    <input type="text" class="form-control" id="grpTitle" aria-describedby="grpTitleerr" placeholder="Enter Title... " autocomplete="off" minlength="2" required>
+                                </div>
+                            </div>
+                        </div><hr>
+                        <div>Select Participants</div>
+                        <div class="mb-2 addMembersContainer">
+                            <div class="addMembers">
+                                
+                            </div>
+                        </div>
+
+                        <small id="formerr" class="form-text"></small>
+                        
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit" class="btn btn-success" style="margin-right: 0px;">Create</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="alertContainer">
+        
+    </div>
+
+    <div class="modal fade" id="deleteAccountModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+        
+                <div class="modal-header">
+                    <h4 class="modal-title">Caution!</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+        
+                <div class="modal-body">
+                    You are about to delete <b>YOUR ACCOUNT</b>. This means it will delete all of your Data including your chats.
+                </div>
+        
+                <div class="modal-footer">
+                    <button id="deleteAccountCancel" class="btn btn-primary">Cancel</button>
+                    <button id="deleteAccountConfirm" class="btn btn-danger">Delete?</button>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(async () => {
+            let counter = 0;
+            const response = await fetch('/chatappLogin');
+            
+            const loggedInUserDetails = (await response.json());
+
+            let userDetails = (loggedInUserDetails).details;
+
+            $('.myProfileContainer').hide();
+            $('.profileLoader').show();
+            
+            const Bdate = new Date(userDetails.dob);
+            const Regdate = new Date(userDetails.registered_on);
+            const formattedbDate = Bdate.toLocaleDateString('en-UK', {
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+            });
+            const formattedRegdate = Regdate.toLocaleDateString('en-UK', {
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+            });
+            
+            $('.otherDetailsGender').text(userDetails.gender);
+            $('.otherDetailsDob').text(formattedbDate);
+            $('.otherDetailsPnum').text(userDetails.pnumber);
+            $('.otherDetailsMail').text(userDetails.email);
+            $('.otherDetailsRegon').text(formattedRegdate);
+            $('.imgContainer > img').attr('src', `data:image/jpeg;base64,${loggedInUserDetails.profile}`);
+            $('.fnameDisplay').text(userDetails.fname + ' ' + userDetails.lname);
+            $('.usernameDisplay').text(`@${userDetails.username}`);
+
+            let friendsList = userDetails.friends;
+            if (friendsList) {
+                Object.keys(friendsList).forEach(async key => {
+                    let value = friendsList[key];
+                    if (value) {
+                        counter++;
+                        let user = await fetch('/getUserDetails', {
+                            method: 'POST', 
+                            headers: {'content-type': 'text/plain'}, 
+                            body: key
+                        });
+                        let reqUser = await user.json();
+
+                        $('.friendsList').append(`
+                            <div class='d-flex requests align-items-center ps-1  justify-content-between'>
+                                <div class="d-flex align-items-center reqProfile">
+                                    <div class='d-flex align-items-center' style='height:47px; width:47px; overflow:hidden; border-radius:50%'>
+                                        <img src="data:image/jpeg;base64,${reqUser.profile}" alt="Profile" height='47px' width='47px'>
+                                    </div>
+                                    <div class='result-item d-flex flex-column' data-id='${reqUser.user._id}'>
+                                        ${reqUser.user.fname} ${reqUser.user.lname}
+                                        <small style='font-size:10px;'>
+                                            ${reqUser.user.username}
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="justify-self-end">
+                                    <button class="btn btn-danger btn-sm rounded-pill me-1 removeFriend" data-id='${reqUser.user._id}'>Remove</button>
+                                </div>
+                            </div>
+                        `);
+
+                        $('.friendsList .reqProfile').off('click').on('click', async (event) => {
+                            try {
+                                window.location.href = `/userProfile?user=${$(event.currentTarget).find('.result-item').data('id')}`;
+                            } catch (error) {
+                                console.error('Error fetching user data:', error);
+                            }
+                        });
+
+                        $('.removeFriend').off('click').on('click', async (event) => {
+                            let removeFriend = $(event.target).data('id');
+
+                            const removeFriendRes = await fetch('/removeFriend', {
+                                method: 'POST', 
+                                headers: {'content-type': 'application/json'}, 
+                                body: JSON.stringify({ from: userDetails._id, unfriend: removeFriend })
+                            });
+                            if (removeFriendRes.ok) {
+                                $(event.target).closest('.requests').remove();
+                                alert('Friend removed.');
+                                location.reload();
+                            } else {
+                                alert('Friendship too strong, friend cannot be removed(error occured).');
+                            }
+                        });
+                    }
+                });
+            }
+
+            $('.friendsCount').text(counter)
+            if (counter == 0) {
+                $('.friendsList').append('<div>You have 0 friends. Search and add friends first.</div>');
+            }
+
+            $('.friendsList').hide();
+
+            $('.friends').on('click', async () => {
+                $('.friendsList').fadeToggle(100);
+            });
+
+            $('.edit').on('click', async () => {
+                $(`#editProfile button[type='submit']`).data('_id', userDetails._id);
+                $('#fname').val(userDetails.fname);
+                $('#lname').val(userDetails.lname);
+                $('#email').val(userDetails.email);
+                $('#uname').val(userDetails.username);
+                $('#pnumber').val((userDetails.pnumber).slice(-10));
+                $(`#pcountry option[value='${(userDetails.pnumber).slice(0, 3).trim()}']`).prop('selected', true);
+                $(`input[name="gender"][value='${userDetails.gender}']`).prop('checked', true);
+
+                const inputDate = new Date(userDetails.dob);
+                const ok = $.datepicker.formatDate('dd-mm-yy', inputDate);
+
+                $('#date').datepicker('setDate', ok);
+                $('#selectedDate').val(ok);
+            });
+
+            $('.editPsswd').on('click', () => {
+                $('#changePsswd-form button[type="submit"]').data('_id', userDetails._id);
+            });
+
+            $('.editpp').on('click', () => {
+                $('#editedpp').trigger('click');
+            });
+
+            $('#editedpp').on('change', async () => {
+                let file = $('#editedpp')[0].files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('user', userDetails._id);
+
+                const response = await fetch('/updateProfilePic', {
+                    method: 'PATCH',
+                    body: formData,
+                });
+            
+                if (response.ok) {
+                    location.reload();
+                } else if (response.status == 500) {
+                    alert(`Error while changing profile picture.`);
+                } else {
+                    alert(`Only .jpg and .jpeg files are supported.`);
+                }
+            });
+
+            $('#deleteAccountConfirm').on('click', async () => {
+
+                const deleteMyAccountRes = await fetch('/deleteMyAccount', {
+                    method: 'DELETE', 
+                    body: userDetails._id
+                });
+                
+                if (deleteMyAccountRes.ok) {
+                    $('#logout').trigger('click');
+                } else {
+                    alert('nah bruh your account cant be deleted cuz we\'ll miss you :( (error occured).');
+                }
+            });
+
+            $('#deleteAccountCancel').on('click', () => {
+                $('.btn-close').trigger('click');
+            });
+
+            $('.myProfileContainer').show();
+            $('.profileLoader').hide();
+
+        });
+    </script>
+
+</body>
+</html>

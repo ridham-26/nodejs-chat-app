@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet" href="chatAppUI.css">
+
+    <script src="./validation.js"></script>
+
+    <style>
+        
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024"><path fill="white" fill-opacity=".15" d="M775.3 248.9a369.62 369.62 0 0 0-119-80A370.2 370.2 0 0 0 512.1 140h-1.7c-99.7.4-193 39.4-262.8 109.9c-69.9 70.5-108 164.1-107.6 263.8c.3 60.3 15.3 120.2 43.5 173.1l4.5 8.4V836h140.8l8.4 4.5c52.9 28.2 112.8 43.2 173.1 43.5h1.7c99 0 192-38.2 262.1-107.6c70.4-69.8 109.5-163.1 110.1-262.7c.2-50.6-9.5-99.6-28.9-145.8a370.15 370.15 0 0 0-80-119zM312 560a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96z"/><path fill="white" d="M664 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0zm-400 0a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/><path fill="white" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 0 0-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 0 0-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 0 0 112 714v152a46 46 0 0 0 46 46h152.1A449.4 449.4 0 0 0 510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 0 0 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z"/><path fill="white" d="M464 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/></svg> 
+            Spark</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#myModalLogin">Log In</button>
+                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#myModalSignup">Sign Up</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sidenavContainer">
+        <div class="sidenav py-3 ps-2">
+            <b>Log in to see chats</b>
+        </div>
+    </div>
+
+    <div class="mainChatContainer container-fluid d-flex flex-column justify-content-center align-items-center pb-5">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            Log in and start chatting!
+        </div>
+        <button class="btn btn-success rounded-pill" id="login" data-bs-toggle="modal" data-bs-target="#myModalLogin">Log In</button>
+    </div>
+
+    <div class="modal fade" id="myModalLogin">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter your details...</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="" id="login-form">
+                        <fieldset>
+                            <legend>Username</legend>
+                            <input type="text" class="form-control" id="log-user" aria-describedby="log-usererr" placeholder="Username..." autocomplete="on">
+                            <small id="log-usererr" class="form-text"></small>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Password</legend>
+                            <div class="input-group pass-toggle">
+                                <input type="password" class="form-control" id="log-pass" aria-describedby="log-passerr" placeholder="Enter Password..." autocomplete="false">
+                                <button type="button" class="toggle-btn btn btn-light">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <small id="log-passerr" class="form-text"></small>
+                        </fieldset> <hr>
+                        <div class="d-flex align-items-center mb-2">
+                            don't have an account? &nbsp;
+                            <a id="register"  data-bs-toggle="modal" data-bs-target="#myModalSignup">
+                                   register now
+                            </a>
+                        </div>
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit" class="btn btn-success" style="margin-right: 0px;">Log In</button>
+                        </div>
+                    </form>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalSignup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Register yourself...</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="" id="reg-form">
+                        <div title="name" class="form-group row">
+                            <label for="fname" class="col-12 col-md-auto col-form-label">Firstname</label>
+                            <div class="col">
+                                <input type="text" class=" form-control" id="fname" aria-describedby="fnameerr" placeholder="Firstname..." autocomplete="on">
+                                <small id="fnameerr" class="form-text"></small>
+                            </div>
+                            <label for="lname" class="col-12 col-md-auto col-form-label">Lastname</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="lname" aria-describedby="lnameerr" placeholder="Lastname...">
+                                <small id="lnameerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label for="pnumber" class="form-label">Mobile Number</label>
+                        <div class="d-flex">
+                            <select name="pcountry" id="pcountry" class="form-control">
+                                <option value="+91" class="defaultNum">In(+91)</option>
+                                <option value="+1">US(+1)</option>
+                                <option value="+10">Can(+10)</option>
+                                <option value="+44">UK(+44)</option>
+                                <option value="+7">Rus(+7)</option>
+                            </select>
+                            <input type="text" id="pnumber" name="pnumber" class="form-control" placeholder="Enter your Mobile Number..." maxlength="10">
+                        </div>
+                        <small id="pnumerr"></small>
+
+                        <hr>
+                        <div title="email" class="form-group row">
+                            <label for="email" class="col-12 col-md-auto col-form-label">Email</label>
+                            <div class="col">
+                                <input type="email" class="form-control" id="email" aria-describedby="emailerr" placeholder="Enter email..." autocomplete="on">
+                                <small id="emailerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div title="uname" class="form-group row">
+                            <label for="uname" class="col-12 col-md-auto col-form-label">Username</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="uname" aria-describedby="unameerr" placeholder="Enter Username..." autocomplete="on">
+                                <small id="unameerr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row mb-2">
+                            <label for="psswd" class="col-12 col-md-auto col-form-label">Password</label>
+                            <div class="col">
+                                <div class="input-group pass-toggle">
+                                    <input type="password" class="form-control" id="psswd" aria-describedby="psswderr" placeholder="Enter Password... " autocomplete="off">
+                                    <button type="button" class="toggle-btn btn btn-light">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <small id="psswderr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <div title="cpsswd" class="form-group row">
+                            <label for="cpsswd" class="col-12 col-md-auto col-form-label">Confirm-Password</label>
+                            <div class="w-100 d-none"></div>
+                            <div class="col">
+                                <input type="password" class="form-control" id="cpsswd" aria-describedby="cpsswderr" placeholder="Confirm Password..." autocomplete="off">
+                                <small id="cpsswderr" class="form-text"></small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row d-flex mqdate flex-nowrap">
+                            <div class="row d-flex mqdate flex-nowrap">
+                                <div class="dateDisp">
+                                    <div class="d-flex justify-content-center flex-column">
+                                        <h4 class="mt-1 me-1">Date of Birth: </h4>
+                                        <input id="selectedDate" placeholder="Select date" readonly/>
+                                    </div>
+                                    <span class="invDate">
+                                        <div id="date"></div>
+                                    </span>
+                                    <small class="dateerr"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div title="gender" class="form-group row" aria-describedby="gendererr">
+                            <span class="col-12 col-md-auto col-form-label">Gender</span>
+                            <div class="col d-flex align-items-center">
+                                <div class="row g-0">
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gmale" value="male">
+                                        <label class="form-check-label" for="gmale">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gfemale" value="female">
+                                        <label class="form-check-label" for="gfemale">Female</label>
+                                    </div>
+                                    <div class="form-check form-check-inline col-auto">
+                                        <input class="form-check-input" type="radio" name="gender" id="gother" value="other">
+                                        <label class="form-check-label" for="gother">Other</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <small id="gendererr" class="form-text"></small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    
+                        <div title="profile-image" class="form-group row mb-2">
+                            <label for="img" class="col-12 col-md-auto col-form-label">Profile image</label> 
+                            <div class="col">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="img" accept="image/*">
+                                </div>
+                                <small id="imgerr" class="form-text"></small>
+                            </div>
+                        </div><hr>
+
+                        <small id="formerr" class="form-text"></small>
+                        
+                        <div title="psswd" class="d-flex align-items-center mb-2">
+                            Already have an account? &nbsp;
+                            <a id="regLogin" data-bs-toggle="modal" data-bs-target="#myModalLogin">
+                                Login
+                            </a>
+                        </div>
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit"  class="btn btn-success" style="margin-right: 0px;">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(async () => {
+            const response = await fetch('/isLoggedIn');
+
+            if (response.ok) {
+                window.location.href = '/chatAppHome';
+            }
+        });
+    </script>
+
+</body>
+</html>

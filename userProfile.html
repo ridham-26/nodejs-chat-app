@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet" href="chatAppUI.css">
+
+    <script src="search.js"></script>
+    <script src="friendReq.js"></script>
+    <script src="loadChatContainers.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+    <script src="group.js"></script>
+
+    <style>
+        
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/chatAppHome">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024"><path fill="white" fill-opacity=".15" d="M775.3 248.9a369.62 369.62 0 0 0-119-80A370.2 370.2 0 0 0 512.1 140h-1.7c-99.7.4-193 39.4-262.8 109.9c-69.9 70.5-108 164.1-107.6 263.8c.3 60.3 15.3 120.2 43.5 173.1l4.5 8.4V836h140.8l8.4 4.5c52.9 28.2 112.8 43.2 173.1 43.5h1.7c99 0 192-38.2 262.1-107.6c70.4-69.8 109.5-163.1 110.1-262.7c.2-50.6-9.5-99.6-28.9-145.8a370.15 370.15 0 0 0-80-119zM312 560a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96zm200 0a48.01 48.01 0 0 1 0-96a48.01 48.01 0 0 1 0 96z"/><path fill="white" d="M664 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0zm-400 0a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/><path fill="white" d="M925.2 338.4c-22.6-53.7-55-101.9-96.3-143.3a444.35 444.35 0 0 0-143.3-96.3C630.6 75.7 572.2 64 512 64h-2c-60.6.3-119.3 12.3-174.5 35.9a445.35 445.35 0 0 0-142 96.5c-40.9 41.3-73 89.3-95.2 142.8c-23 55.4-34.6 114.3-34.3 174.9A449.4 449.4 0 0 0 112 714v152a46 46 0 0 0 46 46h152.1A449.4 449.4 0 0 0 510 960h2.1c59.9 0 118-11.6 172.7-34.3a444.48 444.48 0 0 0 142.8-95.2c41.3-40.9 73.8-88.7 96.5-142c23.6-55.2 35.6-113.9 35.9-174.5c.3-60.9-11.5-120-34.8-175.6zm-151.1 438C704 845.8 611 884 512 884h-1.7c-60.3-.3-120.2-15.3-173.1-43.5l-8.4-4.5H188V695.2l-4.5-8.4C155.3 633.9 140.3 574 140 513.7c-.4-99.7 37.7-193.3 107.6-263.8c69.8-70.5 163.1-109.5 262.8-109.9h1.7c50 0 98.5 9.7 144.2 28.9c44.6 18.7 84.6 45.6 119 80c34.3 34.3 61.3 74.4 80 119c19.4 46.2 29.1 95.2 28.9 145.8c-.6 99.6-39.7 192.9-110.1 262.7z"/><path fill="white" d="M464 512a48 48 0 1 0 96 0a48 48 0 1 0-96 0z"/></svg> 
+            Spark</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div class="search-container">
+                        <div class="d-flex">
+                            <input type="text" class="form-control rounded-pill" placeholder="Search..." id="search">
+                            <span class="d-flex align-items-center search">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="#d8e1e7" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div id="search-results"></div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item d-flex text-light dropdown">
+                    <div class="requestsContainer">
+                        <div class="friendRequests me-4 d-flex justify-content-center rounded-pill align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="rgb(132, 142, 148)" d="M19 17v2H7v-2s0-4 6-4s6 4 6 4m-3-9a3 3 0 1 0-3 3a3 3 0 0 0 3-3m3.2 5.06A5.6 5.6 0 0 1 21 17v2h3v-2s0-3.45-4.8-3.94M18 5a2.91 2.91 0 0 0-.89.14a5 5 0 0 1 0 5.72A2.91 2.91 0 0 0 18 11a3 3 0 0 0 0-6M8 10H5V7H3v3H0v2h3v3h2v-3h3Z"/></svg>
+                        </div>
+                        <div class="requestsPanel px-2"></div>
+                    </div>
+                    <div class="requestsIndicator"></div>
+                    <div class="dropdown">
+                        <div id="selfProfile">
+                            <img src="" alt="Profile" class="dropdown-toggle" data-bs-toggle="dropdown" />
+                            
+                            <ul class="dropdown-menu">
+                                <li><div class="dropdown-item" id="edit">Your Profile</div></li>
+                                <li><div class="dropdown-item" id="logout" style="color: rgb(219, 69, 69);">Logout</div></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="sidenavContainer">
+        <div class="sidenav py-3 ps-2">
+            <div class="sideNavGroup d-flex align-items-center ps-2" data-bs-toggle="modal" data-bs-target="#createGroup">
+                + Add Group
+            </div>
+            <div class="chatContainerLoader w-100">
+                <div class="spinner-border text-secondary"></div>
+            </div>
+            <div class="d-flex flex-column sidenavAppend">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mainProfileContainer container-fluid pb-5">
+
+        <div class="profileLoader w-100">
+            <div class="spinner-border text-secondary"></div>
+        </div>
+
+        <div class="userProfileContainer">
+            <div class="row w-100" style="height: 170px;">
+                <div style="width: 200px; padding-left: 50px; padding-top: 20px;">
+                    <div class="imgContainer">
+                        <img src="" alt="Profile">
+                    </div>
+                </div>
+                <div class="col" style="padding: 20px 0 0 30px;">
+                    <h1 class="fnameDisplay"></h1>
+                    <p class="usernameDisplay"></p>
+                    <div style="margin-top: 50px;" class="d-flex" id="profileActions">
+                        
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row w-100 ps-4 mt-4" id="otherDetailsDisplay">
+                <div>
+                    <h5>Gender</h5>
+                    <p class="otherDetailsGender"></p>
+                </div>
+                <div>
+                    <h5>Birthdate</h5>
+                    <p class="otherDetailsDob"></p>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <p class="otherDetailsPnum"></p>
+                </div>
+                <div>
+                    <h5>Mail</h5>
+                    <p class="otherDetailsMail"></p>
+                </div>
+                <div>
+                    <h5>Registered on</h5>
+                    <p class="otherDetailsRegon"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createGroup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Members (more than 2)</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="group-form">
+                        <div class="form-group row mb-2">
+                            <label for="ppsswd" class="col-12 col-md-auto col-form-label">Group Title</label>
+                            <div class="col">
+                                <div class="input-group pass-toggle">
+                                    <input type="text" class="form-control" id="grpTitle" aria-describedby="grpTitleerr" placeholder="Enter Title... " autocomplete="off" minlength="2" required>
+                                </div>
+                            </div>
+                        </div><hr>
+                        <div>Select Participants</div>
+                        <div class="mb-2 addMembersContainer">
+                            <div class="addMembers">
+                                
+                            </div>
+                        </div>
+
+                        <small id="formerr" class="form-text"></small>
+                        
+                        <div class="modal-footer" style="padding-right: 0px;">
+                            <button type="submit" class="btn btn-success" style="margin-right: 0px;">Create</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="alertContainer">
+        
+    </div>
+
+    <script>
+        $(document).ready(async () => {
+
+            const response = await fetch('/chatappLogin');
+            
+            let userDetails = (await response.json()).details;
+
+            const socket = io('/friendRequest');
+
+            $('.userProfileContainer').hide();
+            $('.profileLoader').show();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const userParam = urlParams.get('user');
+
+            const searchQres = await fetch('/getUserProfile', {
+                method: 'POST', 
+                body: userParam
+            });
+
+            if (searchQres.ok) {
+
+                let userData = await searchQres.json();
+
+                if (userDetails.friends && userData.user._id in userDetails.friends && userDetails.friends[userData.user._id]) {
+                    const Bdate = new Date(userData.user.dob);
+                    const Regdate = new Date(userData.user.registered_on);
+                    const formattedbDate = Bdate.toLocaleDateString('en-UK', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit',
+                    });
+                    const formattedRegdate = Regdate.toLocaleDateString('en-UK', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit',
+                    });
+
+                    if (userData.user.username !== 'undefined') {
+                        $('.otherDetailsGender').text(userData.user.gender);
+                        $('.otherDetailsDob').text(formattedbDate);
+                        $('.otherDetailsPnum').text(userData.user.pnumber);
+                        $('.otherDetailsMail').text(userData.user.email);
+                        $('.otherDetailsRegon').text(formattedRegdate);
+                        $('.usernameDisplay').text(`@${userData.user.username}`);
+                        $('#profileActions').html(`<button class="btn btn-primary btn-sm textFriend me-2" data-id='${userData.user._id}'>Send Message</button><button class="btn btn-danger btn-sm removeFriend" data-id='${userData.user._id}'>Remove Friend</button>`);
+    
+                        $('.textFriend').off('click').on('click', event => {
+                            window.location.href = `/chat?private=true&user=${$(event.target).data('id')}`;
+                        });
+                    } else {
+                        $('.usernameDisplay').text(`@deleted user`);
+                        $('#profileActions').html(`<button class="btn btn-danger btn-sm removeFriend" data-id='${userData.user._id}'>Remove Friend</button>`);
+                        $('#otherDetailsDisplay').html(`<div style='color: #e54555'>User has DELETED their account</div>`);
+                    }
+                    $('.imgContainer > img').attr('src', `data:image/jpeg;base64,${userData.profile}`);
+                    $('.fnameDisplay').text(userData.user.fname + ' ' + userData.user.lname);
+
+                    $('.removeFriend').off('click').on('click', async event => {
+                        let removeFriend = $(event.target).data('id');
+
+                        const removeFriendRes = await fetch('/removeFriend', {
+                            method: 'POST', 
+                            headers: {'content-type': 'application/json'}, 
+                            body: JSON.stringify({ from: userDetails._id, unfriend: removeFriend })
+                        });
+                        if (removeFriendRes.ok) {
+                            alert('Friend removed.');
+                            location.reload();
+                        } else {
+                            alert('Friendship too strong, friend cannot be removed(error occured).');
+                        }
+                    });
+
+                } else {
+                    if (userData.user.username !== 'undefined') {
+                        $('.usernameDisplay').text(`@${userData.user.username}`);
+                        $('#otherDetailsDisplay').html('');
+                        $('#profileActions').html(`<button class="btn btn-primary btn-sm addFriend" data-id='${userData.user._id}'>Add Friend</button>`);
+                        $('.addFriend').on('click', async () => {
+                            const friendReqRes = await fetch('/friendRequest', {
+                                method: 'POST', 
+                                body: JSON.stringify({ from: userDetails._id, to: userData.user._id })
+                            });
+                            if (friendReqRes.ok) {
+                                socket.emit('friend request', { from: userDetails._id, to: userData.user._id });
+                                alert('Friend request sent!');
+                            } else {
+                                alert('Failed to send friend request.');
+                            }
+                        });
+                    } else {
+                        $('.usernameDisplay').text(`@deleted user`);
+                        $('#otherDetailsDisplay').html(`<div style='color: #e54555'>User has DELETED their account</div>`);
+                    }
+                    $('.imgContainer > img').attr('src', `data:image/jpeg;base64,${userData.profile}`);
+                    $('.fnameDisplay').text(userData.user.fname + ' ' + userData.user.lname);
+                    
+                }
+
+            } else if (searchQres.status == 404) {
+                $('.mainProfileContainer').html('User not found!');
+            } else {
+                alert('Internal server error.');
+            }
+
+            $('.userProfileContainer').show();
+            $('.profileLoader').hide();
+
+        });
+    </script>
+
+</body>
+</html>
