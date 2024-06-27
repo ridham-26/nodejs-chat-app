@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const registeredUsersDB = mongoose.createConnection('mongodb+srv://ridhampanchalsapphire:rachelislub@cluster0.fhjsmwy.mongodb.net/?retryWrites=true&w=majority', {
+const registeredUsersDB = mongoose.createConnection('', {
     dbName: 'registeredUsers'
 });
 
-const chatDB = mongoose.createConnection('mongodb+srv://ridhampanchalsapphire:rachelislub@cluster0.fhjsmwy.mongodb.net/?retryWrites=true&w=majority', {
+const chatDB = mongoose.createConnection('', {
     dbName: 'chat'
 });
 
